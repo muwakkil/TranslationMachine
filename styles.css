@@ -4,11 +4,220 @@ body {
     flex-direction: column;
     align-items: center;
     margin: 20px;
+    background-color: bisque;
 }
-svg {
-    border: 1px solid black;
-    background: #f9f9f9;
+
+header{
+    font-size: larger;
+
 }
+.container {
+    display: flex; /* Aligning left box and motif canvas side by side */
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1200px;
+}
+
+.left-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    border: 2px dotted black; /* Dotted border for the left box */
+    padding: 20px;
+    width: 30%; /* Control the width of the left box */
+    max-width: 300px;
+    gap: 20px;
+}
+
+.text {
+    text-align:justify;
+    font-size: 15px;
+    text-justify:distribute;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+}
+
 .controls {
-    margin: 10px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    text-align: center;
+}
+
+.controls label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.controls input[type="range"] {
+    width: 200px; 
+    height: 20px; 
+    background: #ddd; /* Light gray background for the slider track */
+    /* border-radius: 5px; Optional: round the edges of the track */
+    -webkit-appearance: none; /* Remove default Webkit styling */
+    appearance: none; /* Remove default browser styling */
+    outline: none; /* Remove default outline */
+}
+
+/* Slider Track Styling */
+.controls input[type="range"]::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 10px;
+    background: #ddd; /* Rectangular gray background for the track */
+    /* border-radius: 5px; */
+}
+
+.controls input[type="range"]::-moz-range-track {
+    width: 100%;
+    height: 10px;
+    background: #ddd;
+    /* border-radius: 5px; */
+}
+
+.controls input[type="range"]::-ms-track {
+    width: 100%;
+    height: 10px;
+    background: #ddd;
+    /* border-radius: 5px; */
+    border: none;
+}
+
+/* Thumb (the draggable part) */
+.controls input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 10px; /* Make the thumb wider */
+    height: 20px; /* Make the thumb round */
+    background: #333; /* Dark color for the thumb */
+    border-radius: 0; /* Make the thumb round */
+    cursor: pointer;
+}
+
+.controls input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: #333;
+    border-radius: 0;
+    cursor: pointer;
+}
+
+.controls input[type="range"]::-ms-thumb {
+    width: 20px;
+    height: 20px;
+    background: #333;
+    border-radius: 0;
+    cursor: pointer;
+}
+
+/* Style the canvas element where shapes will be drawn */
+#motifCanvas {
+    width: 800px;
+    height: 500px;
+    border: 1px solid black;
+    position: relative;
+    background: rgb(247, 236, 223);
+}
+
+/* Layout and styling for the keyboard (buttons) section */
+.keyboard {
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+/* Layout for the rows of keys in the keyboard */
+.keyboard-row {
+    display: flex;
+    gap: 14px;
+
+}
+
+/* Style for each key button in the keyboard */
+.key {
+    padding: 10px;
+    border: 1px solid black;
+    background: lightgray;
+    cursor: pointer;
+    font-family: Helvetica, sans-serif; /* Change to your preferred font */
+    font-size: 16px; /* You can also adjust the font size */
+    font-weight: bold;
+}
+
+/* Common properties for all shapes */
+.shape {
+    position: absolute;
+    cursor: grab;
+}
+
+/* Style for circle shape (transparent fill and black outline) */
+.circle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: transparent; /* Transparent fill */
+    border: 2px solid black; /* Outline for circle */
+}
+
+/* Style for square shape (transparent fill and black outline) */
+.square {
+    width: 50px;
+    height: 50px;
+    background-color: transparent; /* Transparent fill */
+    border: 2px solid black; /* Outline for square */
+}
+
+/* Style for triangle shape (black border at the bottom) */
+.triangle {
+    width: 0;
+    height: 0;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-bottom: 15px solid black; /* Triangle outline */
+}
+
+/* Style for diamond shape (rotated square with transparent fill and black outline) */
+.diamond {
+    width: 0;
+    height: 0;
+    border-left: 25px solid transparent;
+    border-right: 25px solid transparent;
+    border-bottom: 25px solid transparent;
+    border-top: 25px solid transparent;
+    transform: rotate(45deg);
+    background-color: transparent; /* Transparent fill */
+    border: 2px solid black; /* Outline for diamond */
+}
+
+/* Style for ellipse shape (transparent fill and black outline) */
+.ellipse {
+    width: 80px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: transparent; /* Transparent fill */
+    border: 2px solid black; /* Outline for ellipse */
+}
+
+/* Style for hexagon shape (rotated and with transparent fill and black outline) */
+.hexagon {
+    width: 80px;
+    height: 80px;
+    background-color: transparent; /* Transparent fill */
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+    border-top: 35px solid black;
+    border-bottom: 35px solid black;
+    transform: rotate(30deg);
+    border: 2px solid black; /* Outline for hexagon */
+}
+
+/* Styling for the letter output section */
+#letterOutput {
+    margin-top: 20px;
+    font-size: 20px;
+    font-weight: bold;
 }
