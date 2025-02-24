@@ -1,115 +1,126 @@
-// Mapping each letter to a specific shape
+// Mapping each letter to an SVG shape
 const shapeMap = {
-    'A': 'circle', 'B': 'square', 'C': 'triangle', 'D': 'circle', 'E': 'square', 'F': 'triangle',
-    'G': 'diamond', 'H': 'ellipse', 'I': 'hexagon', 'J': 'circle', 'K': 'square', 'L': 'triangle',
-    'M': 'diamond', 'N': 'ellipse', 'O': 'hexagon', 'P': 'circle', 'Q': 'square', 'R': 'triangle',
-    'S': 'diamond', 'T': 'ellipse', 'U': 'hexagon', 'V': 'circle', 'W': 'square', 'X': 'triangle',
-    'Y': 'diamond', 'Z': 'ellipse'
+    'A': 'circle.svg', 'B': 'square.svg', 'C': 'triangle.svg', 'D': 'diamond.svg',
+    'E': 'polygon.svg', 'F': 'rhombus.svg', 'G': 'outline_1.svg', 'H': 'outline_2.svg',
+    'I': 'circle.svg', 'J': 'square.svg', 'K': 'triangle.svg', 'L': 'diamond.svg',
+    'M': 'polygon.svg', 'N': 'rhombus.svg', 'O': 'outline_1.svg', 'P': 'outline_2.svg',
+    'Q': 'circle.svg', 'R': 'square.svg', 'S': 'triangle.svg', 'T': 'diamond.svg',
+    'U': 'polygon.svg', 'V': 'rhombus.svg', 'W': 'outline_1.svg', 'X': 'outline_2.svg',
+    'Y': 'circle.svg', 'Z': 'square.svg'
 };
 
-// Function to draw the motif shape based on the clicked letter
+// Function to draw the motif shape
 function drawMotif(letter) {
-    // Get the size of the shape from the input
     const size = document.getElementById('size').value;
-    
-    // Get the canvas element where shapes are placed
     const canvas = document.getElementById('motifCanvas');
-    
-    // Element to show the clicked letter
     const letterOutput = document.getElementById('letterOutput');
-    
-    // Check if the letter corresponds to a shape in the shapeMap
+
     if (shapeMap[letter]) {
-        // Create a new div element for the shape
-        const shape = document.createElement('div');
-        
-        // Add the appropriate class for the shape
-        shape.classList.add('shape', shapeMap[letter]);
-        
-        // Set the size of the shape
+        const shapeName = shapeMap[letter];
+        const shape = document.createElement('img');
+
+        // Set correct path for the SVG shape 
+        shape.src = shapeName;
+        shape.classList.add('shape');
         shape.style.width = `${size}px`;
         shape.style.height = `${size}px`;
+        shape.style.position = "absolute";
 
-        // Generate a random position within the canvas
-        const x = Math.random() * (canvas.offsetWidth - size) + 10;
-        const y = Math.random() * (canvas.offsetHeight - size) + 10;
+        // Generate random position within the canvas
+        const x = Math.random() * (canvas.clientWidth - size);
+        const y = Math.random() * (canvas.clientHeight - size);
 
-        // Position the shape on the canvas
         shape.style.left = `${x}px`;
         shape.style.top = `${y}px`;
 
-        // Append the shape to the canvas
-        canvas.appendChild(shape);
+        // Ensure image loads before adding it to the canvas
+        shape.onload = () => {
+            canvas.appendChild(shape);
+            makeDraggable(shape);
+            letterOutput.textContent += letter;
+        };
 
-        // Make the shape draggable
-        makeDraggable(shape);
-
-        // Update the output text with the clicked letter
-        letterOutput.textContent += letter;
+        // Handle image loading error
+        shape.onerror = () => console.error(`Error loading: ${shapeName}`);
     }
 }
 
-// Function to make a shape draggable within the canvas
+// Function to make the shape draggable
 function makeDraggable(shape) {
-    // Track if the shape is being dragged
     let isDragging = false;
-    
-    // Store horizontal offset of the mouse from the shape's left edge
-    let offsetX = 0;
-    
-    // Store vertical offset of the mouse from the shape's top edge
-    let offsetY = 0;
+    let offsetX, offsetY;
 
-    // When mouse button is pressed down on the shape (mousedown)
-    shape.addEventListener('mousedown', function(e) {
-        isDragging = true; // Set dragging flag to true
-        
-        // Get the shape's position relative to the viewport
+    shape.addEventListener('mousedown', function (e) {
+        isDragging = true;
         const rect = shape.getBoundingClientRect();
-        
-        // Calculate the horizontal offset
         offsetX = e.clientX - rect.left;
-        
-        // Calculate the vertical offset
         offsetY = e.clientY - rect.top;
-        
-        // Change cursor to indicate dragging
         shape.style.cursor = 'grabbing';
+
+        document.addEventListener('mousemove', moveShape);
+        document.addEventListener('mouseup', stopDragging);
     });
 
-    // When mouse is moved (mousemove)
-    document.addEventListener('mousemove', function(e) {
-        if (isDragging) {
-            // Get the canvas element
-            const canvas = document.getElementById('motifCanvas');
-            
-            // Update the shape's x position based on mouse movement
-            let x = e.clientX - offsetX;
-            
-            // Update the shape's y position based on mouse movement
-            let y = e.clientY - offsetY;
+    function moveShape(e) {
+        if (!isDragging) return;
 
-            // Prevent the shape from moving outside the canvas boundaries
-            x = Math.max(0, Math.min(x, canvas.offsetWidth - shape.offsetWidth));
-            y = Math.max(0, Math.min(y, canvas.offsetHeight - shape.offsetHeight));
+        const canvas = document.getElementById('motifCanvas');
+        const canvasRect = canvas.getBoundingClientRect();
 
-            // Update the position of the shape
-            shape.style.left = `${x}px`;
-            shape.style.top = `${y}px`;
-        }
-    });
+        let x = e.clientX - canvasRect.left - offsetX;
+        let y = e.clientY - canvasRect.top - offsetY;
 
-    // When mouse button is released (mouseup)
-    document.addEventListener('mouseup', function() {
-        isDragging = false; // Set dragging flag to false
-        shape.style.cursor = 'grab'; // Change cursor back to original
-    });
+        // Keep shapes within the canvas
+        x = Math.max(0, Math.min(x, canvasRect.width - shape.clientWidth));
+        y = Math.max(0, Math.min(y, canvasRect.height - shape.clientHeight));
+
+        shape.style.left = `${x}px`;
+        shape.style.top = `${y}px`;
+    }
+
+    function stopDragging() {
+        isDragging = false;
+        shape.style.cursor = 'grab';
+        document.removeEventListener('mousemove', moveShape);
+        document.removeEventListener('mouseup', stopDragging);
+    }
 }
 
-// Add event listeners to each button with the 'key' class
-document.querySelectorAll('.key').forEach(button => {
-    button.addEventListener('click', (e) => {
-        drawMotif(e.target.textContent); // Call the drawMotif function when a key is clicked
-    });
+// Function to save motif as an image
+function saveMotif() {
+    html2canvas(document.getElementById('motifCanvas'), { backgroundColor: null }).then(canvas => {
+        const link = document.createElement('a');
+        link.href = canvas.toDataURL('image/png');
+        link.download = 'motif.png';
+        link.click();
+    }).catch(err => console.error("Error saving image:", err));
+}
+
+// Generate keyboard buttons dynamically
+const keyboardContainer = document.querySelector('.keyboard');
+const rows = [document.createElement('div'), document.createElement('div'), document.createElement('div')];
+
+rows.forEach(row => row.classList.add('keyboard-row'));
+
+const keys = 'QWERTYUIOPASDFGHJKLZXCVBNM'.split('');
+keys.forEach((letter, index) => {
+    const button = document.createElement('button');
+    button.textContent = letter;
+    button.classList.add('key');
+    button.addEventListener('click', () => drawMotif(letter));
+
+    // Distribute keys into rows
+    if (index < 10) rows[0].appendChild(button);
+    else if (index < 19) rows[1].appendChild(button);
+    else rows[2].appendChild(button);
 });
+
+// Append rows to keyboard container
+rows.forEach(row => keyboardContainer.appendChild(row));
+
+// Add event listener for saving motifs
+document.getElementById('saveButton').addEventListener('click', saveMotif);
+
+
+
 

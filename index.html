@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Translation_Machine</title>
+    <title>Translation Machine</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -12,35 +12,30 @@
         <!-- Left box with text and controls -->
         <div class="left-box">
             <div class="text">
-                <p>Type a word and see what shapes come up. Try and make a motif/mosaic out of these shapes. To change shape or stroke toggle the bar before selecting a letter. Save what you make! Goodluckkkk</p>
+                <p>Type a word and see what shapes come up. Try and make a motif/mosaic out of these shapes. 
+                To change shape or stroke, toggle the bar before selecting a letter. Save what you make! Good luck!</p>
             </div>
             <div class="controls">
                 <label>SIZE: <input type="range" id="size" min="10" max="100" value="50"></label>
                 <label>STROKE: <input type="range" id="stroke" min="1" max="10" value="2"></label>
+                <label>COLOR: <input type="color" id="colorPicker"></label>
             </div>
         </div>
-        <!-- Motif canvas on the right side -->
-        <div id="motifCanvas" class="motif-canvas"></div>
+
+        <!-- Motif canvas with save button -->
+        <div class="canvas-container">
+            <button id="saveButton">Save</button>
+            <div id="motifCanvas" class="motif-canvas"></div>
+        </div>
     </div>
 
+    <!-- Keyboard -->
     <div class="keyboard">
-        <div class="keyboard-row">
-            <button class="key">A</button><button class="key">B</button><button class="key">C</button>
-            <button class="key">D</button><button class="key">E</button><button class="key">F</button>
-            <button class="key">G</button><button class="key">H</button><button class="key">I</button>
-            <button class="key">J</button><button class="key">K</button><button class="key">L</button>
-        </div>
-        <div class="keyboard-row">
-            <button class="key">M</button><button class="key">N</button><button class="key">O</button>
-            <button class="key">P</button><button class="key">Q</button><button class="key">R</button>
-            <button class="key">S</button><button class="key">T</button><button class="key">U</button>
-            <button class="key">V</button><button class="key">W</button><button class="key">X</button>
-        </div>
-        <div class="keyboard-row">
-            <button class="key">Y</button><button class="key">Z</button>
-        </div>
+        <div class="keyboard-row" id="keyboardContainer"></div>
     </div>
+
     <div id="letterOutput"></div>
+
     <script src="scripts.js"></script>
 </body>
 </html>
